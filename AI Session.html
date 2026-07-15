@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Awareness & Fundamentals | Interactive Session</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    --primary-soft: #eef2ff;
+    --secondary: #0891b2;
+    --accent: #db2777;
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --bg-alt: #f1f5f9;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+    --shadow: 0 4px 12px rgba(15,23,42,0.08);
+    --shadow-lg: 0 10px 30px rgba(15,23,42,0.12);
+    --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-3: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --gradient-4: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --gradient-5: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  .bg-pattern {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(79,70,229,0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(8,145,178,0.05) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(219,39,119,0.03) 0%, transparent 50%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    z-index: -1;
+  }
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 2rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .logo {
+    font-size: 1.25rem; font-weight: 800;
+    background: var(--gradient); -webkit-background-clip: text;
+    background-clip: text; color: transparent;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .logo-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--gradient); display: grid; place-items: center;
+    color: white; font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+  }
+  .nav-links { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .nav-btn {
+    background: transparent; color: var(--text-muted); border: 1px solid transparent;
+    padding: 0.45rem 0.85rem; border-radius: 8px; cursor: pointer;
+    font-size: 0.8rem; font-weight: 500; transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--primary-soft); color: var(--primary); }
+  .nav-btn.active {
+    background: var(--gradient); color: white;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+  }
+  section {
+    max-width: 1200px; margin: 0 auto; padding: 3.5rem 2rem;
+    animation: fadeUp 0.5s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
+    background: var(--gradient); -webkit-background-clip: text;
+    background-clip: text; color: transparent; margin-bottom: 1rem;
+    line-height: 1.2; letter-spacing: -0.02em;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700;
+    color: var(--text); margin-bottom: 0.8rem; letter-spacing: -0.01em;
+  }
+  h3 { color: var(--text); margin-bottom: 0.8rem; font-size: 1.15rem; font-weight: 600; }
+  p { color: var(--text-muted); margin-bottom: 1rem; }
+  .section-sub { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; max-width: 720px; }
+  .hero { text-align: center; padding: 5rem 2rem 3rem; }
+  .hero-badge {
+    display: inline-block; background: var(--primary-soft); color: var(--primary);
+    padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem;
+    font-weight: 600; margin-bottom: 1.5rem;
+    border: 1px solid rgba(79,70,229,0.2);
+  }
+  .hero-sub {
+    font-size: 1.15rem; color: var(--text-muted); max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+  .cta-btn {
+    background: var(--gradient); color: white; border: none;
+    padding: 0.9rem 2rem; border-radius: 10px; cursor: pointer;
+    font-size: 1rem; font-weight: 600;
+    box-shadow: 0 8px 20px rgba(79,70,229,0.3);
+    transition: all 0.25s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(79,70,229,0.4); }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.6rem;
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(79,70,229,0.3);
+  }
+  .card-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--gradient); display: grid; place-items: center;
+    font-size: 1.4rem; margin-bottom: 1rem; color: white;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.25);
+  }
+  .card-icon.teal { background: var(--gradient-2); box-shadow: 0 4px 12px rgba(79,172,254,0.3); }
+  .card-icon.green { background: var(--gradient-3); box-shadow: 0 4px 12px rgba(67,233,123,0.3); }
+  .card-icon.pink { background: var(--gradient-4); box-shadow: 0 4px 12px rgba(250,112,154,0.3); }
+  .card-icon.purple { background: var(--gradient-5); box-shadow: 0 4px 12px rgba(48,207,208,0.3); }
+  .timeline { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+  .timeline-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    transition: all 0.3s; cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+  .timeline-item:hover {
+    transform: translateX(6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+  }
+  .timeline-item.highlight {
+    background: var(--gradient);
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(79,70,229,0.35);
+  }
+  .tl-year {
+    font-weight: 800; font-size: 1.15rem; color: var(--primary);
+    min-width: 60px;
+  }
+  .timeline-item.highlight .tl-year { color: white; }
+  .tl-name { flex: 1; font-weight: 600; color: var(--text); }
+  .timeline-item.highlight .tl-name { color: white; }
+  .tl-time {
+    background: var(--primary-soft); color: var(--primary);
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 600;
+  }
+  .timeline-item.highlight .tl-time {
+    background: rgba(255,255,255,0.2); color: white;
+  }
+  .flip-card { perspective: 1000px; height: 220px; cursor: pointer; }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.6s; transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; border-radius: 14px;
+    padding: 1.5rem; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .flip-front {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: var(--danger);
+    border: 1px solid #fecaca;
+  }
+  .flip-back {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: var(--success);
+    border: 1px solid #a7f3d0;
+    transform: rotateY(180deg);
+  }
+  .flip-front h3 { color: var(--danger); }
+  .flip-back h3 { color: var(--success); }
+  .flip-hint { font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem; }
+  .spectrum {
+    display: flex; gap: 0; margin-top: 1.5rem;
+    border-radius: 14px; overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  .spectrum-item {
+    flex: 1; padding: 1.5rem 1rem; text-align: center;
+    cursor: pointer; transition: all 0.3s;
+    border-right: 1px solid var(--border);
+  }
+  .spectrum-item:last-child { border-right: none; }
+  .spectrum-item:hover { background: var(--primary-soft); }
+  .spectrum-item.active {
+    background: var(--gradient); color: white;
+  }
+  .spectrum-item h4 { color: var(--text); margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .spectrum-item p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+  .spectrum-item.active h4, .spectrum-item.active p { color: white; }
+    .mindmap-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .mindmap-svg {
+    width: 100%; height: 560px;
+    display: block;
+  }
+  .mindmap-node {
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .mindmap-node:hover .node-circle {
+    filter: drop-shadow(0 10px 25px rgba(79,70,229,0.5));
+    transform-origin: center;
+  }
+  .node-circle {
+    transition: all 0.3s;
+  }
+  .node-circle.active {
+    stroke-width: 5;
+    filter: drop-shadow(0 10px 25px rgba(79,70,229,0.5));
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { filter: drop-shadow(0 10px 25px rgba(79,70,229,0.5)); }
+    50% { filter: drop-shadow(0 10px 35px rgba(79,70,229,0.8)); }
+  }
+  .node-icon {
+    font-size: 26px;
+    pointer-events: none;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .node-label {
+    font-weight: 700; font-size: 14px;
+    fill: var(--text);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+  .node-sublabel {
+    font-size: 11px;
+    fill: var(--text-muted);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+  .connection-line {
+    stroke: url(#lineGradient);
+    stroke-width: 2.5;
+    fill: none;
+    opacity: 0.35;
+    transition: all 0.4s;
+  }
+  .connection-line.active {
+    opacity: 1;
+    stroke-width: 3.5;
+    stroke-dasharray: 0;
+  }
+  .mindmap-details {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease;
+    box-shadow: var(--shadow);
+  }
+  .mindmap-header {
+    padding: 1.5rem 1.8rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .mindmap-header-icon {
+    font-size: 2.5rem;
+    background: rgba(255,255,255,0.2);
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: grid; place-items: center;
+    backdrop-filter: blur(10px);
+  }
+  .mindmap-header-text h3 {
+    color: white; margin: 0 0 0.2rem 0;
+    font-size: 1.4rem;
+  }
+  .mindmap-header-text p {
+    color: rgba(255,255,255,0.9);
+    margin: 0; font-size: 0.9rem;
+  }
+  .mindmap-body { padding: 1.5rem 1.8rem; }
+  .mindmap-section { margin-bottom: 1.3rem; }
+  .mindmap-section:last-child { margin-bottom: 0; }
+  .mindmap-section-title {
+    font-size: 1.1rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); margin-bottom: 0.6rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .mindmap-desc {
+    color: var(--text); font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .char-list {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .char-pill {
+    background: var(--primary-soft);
+    color: var(--primary);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: 1px solid rgba(79,70,229,0.15);
+  }
+  .example-list {
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .example-item {
+    display: flex; gap: 0.8rem; align-items: start;
+    padding: 0.7rem 0.9rem;
+    background: var(--bg);
+    border-radius: 10px;
+    border-left: 3px solid var(--primary);
+  }
+  .example-item strong {
+    color: var(--text); font-size: 0.9rem;
+    display: block; margin-bottom: 0.15rem;
+  }
+  .example-item span {
+    color: var(--text-muted); font-size: 0.82rem;
+  }
+  .did-you-know {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left: 4px solid #f59e0b;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    display: flex; gap: 0.8rem; align-items: start;
+  }
+  .did-you-know-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .did-you-know strong {
+    display: block; color: #92400e;
+    font-size: 0.8rem; margin-bottom: 0.2rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .did-you-know p {
+    color: #78350f; font-size: 0.88rem;
+    margin: 0; line-height: 1.5;
+  }
+  .hierarchy-note {
+    background: var(--bg-alt);
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .chip {
+    display: inline-block;
+    background: var(--primary-soft); color: var(--primary);
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+    font-size: 0.8rem; border: 1px solid rgba(79,70,229,0.2);
+    margin: 0.2rem;
+  }
+  .chip.teal { background: #ecfeff; color: var(--secondary); border-color: rgba(8,145,178,0.2); }
+  .chip.green { background: #ecfdf5; color: var(--success); border-color: rgba(5,150,105,0.2); }
+  .chip.pink { background: #fdf2f8; color: var(--accent); border-color: rgba(219,39,119,0.2); }
+  .chip.purple { background: #f5f3ff; color: #7c3aed; border-color: rgba(124,58,237,0.2); }
+  .steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .step {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    position: relative; box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+  }
+  .step:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .step-num {
+    position: absolute; top: -14px; left: 20px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--gradient); color: white;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+  }
+  .step h3 { margin-top: 0.5rem; }
+  .pipeline {
+    display: flex; gap: 0; margin-top: 1.5rem;
+    overflow-x: auto; padding-bottom: 0.5rem;
+  }
+  .pipeline-step {
+    flex: 1; min-width: 140px;
+    background: var(--card); border: 1px solid var(--border);
+    padding: 1.2rem 0.8rem; text-align: center;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .pipeline-step:first-child { border-radius: 12px 0 0 12px; }
+  .pipeline-step:last-child { border-radius: 0 12px 12px 0; }
+  .pipeline-step:not(:last-child)::after {
+    content: '→'; position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%); color: var(--primary);
+    font-size: 1.2rem; font-weight: 700; z-index: 2;
+    background: var(--bg); width: 20px; height: 20px;
+    border-radius: 50%; display: grid; place-items: center;
+  }
+  .pipeline-step:hover { background: var(--primary-soft); }
+  .pipeline-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  .pipeline-step h4 { font-size: 0.85rem; color: var(--text); }
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .compare-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    position: relative; overflow: hidden;
+  }
+  .compare-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 4px;
+  }
+  .compare-card.gen::before { background: var(--gradient); }
+  .compare-card.pred::before { background: var(--gradient-2); }
+  .compare-card h3 { display: flex; align-items: center; gap: 0.5rem; }
+  .compare-card ul { list-style: none; padding: 0; margin-top: 0.8rem; }
+  .compare-card li {
+    padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+    color: var(--text-muted); font-size: 0.9rem;
+    display: flex; align-items: start; gap: 0.5rem;
+  }
+  .compare-card li:last-child { border-bottom: none; }
+  .compare-card li::before { content: '✓'; color: var(--success); font-weight: 700; }
+  .prompt-lab {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.8rem; margin-top: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .prompt-field { margin-bottom: 1.1rem; }
+  .prompt-field label {
+    display: block; color: var(--primary); font-weight: 600;
+    margin-bottom: 0.4rem; font-size: 0.85rem;
+  }
+  .prompt-field input, .prompt-field textarea, .prompt-field select {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.7rem 0.9rem; color: var(--text);
+    font-family: inherit; font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .prompt-field input:focus, .prompt-field textarea:focus, .prompt-field select:focus {
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+    background: white;
+  }
+  .prompt-field textarea { min-height: 70px; resize: vertical; }
+  .prompt-output {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #a7f3d0;
+    border-radius: 12px; padding: 1.3rem;
+    margin-top: 1.2rem;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    color: #065f46;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .prompt-output-label {
+    color: var(--success); font-weight: 700; margin-bottom: 0.5rem;
+    font-family: inherit;
+  }
+  .levels {
+    display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem;
+  }
+  .level {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem 1.5rem;
+    display: flex; gap: 1.2rem; align-items: start;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+  }
+  .level:hover { transform: translateX(4px); box-shadow: var(--shadow); }
+  .level-badge {
+    flex-shrink: 0; padding: 0.3rem 0.8rem;
+    border-radius: 20px; font-size: 0.75rem;
+    font-weight: 700; color: white;
+  }
+  .level.basic .level-badge { background: #f59e0b; }
+  .level.clear .level-badge { background: #3b82f6; }
+  .level.good .level-badge { background: var(--success); }
+  .level-content { flex: 1; }
+  .level-content code {
+    display: block; background: var(--bg-alt);
+    padding: 0.6rem 0.9rem; border-radius: 8px;
+    font-size: 0.85rem; color: var(--text);
+    margin-top: 0.5rem; border-left: 3px solid var(--primary);
+    font-family: 'Courier New', monospace;
+  }
+  .hallucination-demo {
+    background: var(--card);
+    border: 1px solid #fecaca;
+    border-radius: 14px; padding: 1.5rem; margin-top: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .red-flag {
+    display: flex; align-items: start; gap: 1rem;
+    padding: 0.9rem; background: #fef2f2;
+    border-left: 3px solid var(--danger);
+    border-radius: 8px; margin-bottom: 0.7rem;
+  }
+  .red-flag:last-child { margin-bottom: 0; }
+  .red-flag-icon { color: var(--danger); font-size: 1.1rem; flex-shrink: 0; }
+  .red-flag strong { color: var(--text); }
+  .red-flag div { color: var(--text-muted); font-size: 0.9rem; }
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem; margin-top: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .quiz-question {
+    font-size: 1.15rem; font-weight: 600; color: var(--text);
+    margin-bottom: 1.2rem;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .quiz-option {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text); padding: 0.85rem 1.1rem;
+    border-radius: 10px; cursor: pointer; text-align: left;
+    font-size: 0.95rem; transition: all 0.2s;
+  }
+  .quiz-option:hover:not(:disabled) {
+    background: var(--primary-soft);
+    border-color: var(--primary);
+  }
+  .quiz-option.correct {
+    background: #d1fae5; border-color: var(--success); color: #065f46;
+  }
+  .quiz-option.wrong {
+    background: #fee2e2; border-color: var(--danger); color: #991b1b;
+  }
+  .quiz-progress {
+    display: flex; justify-content: space-between;
+    margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;
+  }
+  .quiz-score {
+    text-align: center; padding: 2rem;
+    background: var(--gradient); border-radius: 14px;
+    margin-top: 1rem;
+  }
+  .quiz-score h3 { color: white; font-size: 2.2rem; }
+  .quiz-score p { color: white; }
+  .industry-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem; margin-top: 1.5rem;
+  }
+  .industry {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.3rem;
+    box-shadow: var(--shadow-sm); transition: all 0.3s;
+  }
+  .industry:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .industry-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .industry h4 { color: var(--text); margin-bottom: 0.4rem; font-size: 1rem; }
+  .industry p { font-size: 0.85rem; margin: 0; }
+  .copilot-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .copilot-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .copilot-card.can { border-left: 4px solid var(--success); }
+  .copilot-card.cannot { border-left: 4px solid var(--danger); }
+  .copilot-card ul { list-style: none; padding: 0; margin-top: 0.8rem; }
+  .copilot-card li {
+    padding: 0.45rem 0; color: var(--text-muted);
+    font-size: 0.9rem; display: flex; align-items: start; gap: 0.5rem;
+  }
+  .copilot-card.can li::before { content: '✓'; color: var(--success); font-weight: 700; }
+  .copilot-card.cannot li::before { content: '✗'; color: var(--danger); font-weight: 700; }
+  .demo-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem; margin-top: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .demo-card h3 { display: flex; align-items: center; gap: 0.5rem; }
+  .demo-prompt {
+    background: var(--bg-alt); border-left: 3px solid var(--primary);
+    padding: 1rem; border-radius: 8px; margin-top: 0.8rem;
+    font-family: 'Courier New', monospace; font-size: 0.85rem;
+    color: var(--text); white-space: pre-wrap; line-height: 1.6;
+  }
+  footer {
+    text-align: center; padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem; color: var(--text-muted);
+    background: var(--card);
+  }
+  .footer-quote {
+    font-style: italic; color: var(--text);
+    max-width: 600px; margin: 0 auto 1rem;
+    font-size: 1.05rem;
+  }
+  .footer-pillars {
+    display: flex; justify-content: center; gap: 2rem;
+    margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .pillar { text-align: center; }
+  .pillar-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+  .pillar-label { font-weight: 600; color: var(--text); font-size: 0.9rem; }
+  @media (max-width: 768px) {
+    section { padding: 2rem 1rem; }
+    .spectrum { flex-direction: column; }
+    .spectrum-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .compare-grid, .copilot-grid { grid-template-columns: 1fr; }
+    .mindmap-svg { height: 400px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const Nav = ({ current, setCurrent }) => {
+  const sections = [
+    { id: 'home', label: '🏠 Home' },
+    { id: 'timeline', label: '📈 Adoption' },
+    { id: 'myths', label: '🎭 Myths' },
+    { id: 'how', label: '⚙️ How AI Works' },
+    { id: 'types', label: '🧠 AI Types' },
+    { id: 'spectrum', label: '🌊 Spectrum' },
+    { id: 'universe', label: '🌌 Universe' },
+    { id: 'genai', label: '🎨 Gen vs Pred' },
+    { id: 'data', label: '💾 Data & LLM' },
+    { id: 'copilot', label: '🚀 Co-Pilot' },
+    { id: 'prompt', label: '✍️ Prompts' },
+    { id: 'demos', label: '🎬 Demos' },
+    { id: 'cases', label: '🏢 Industries' },
+    { id: 'risks', label: '🚨 Risks' },
+    { id: 'social', label: '🤝 Social Good' },
+    { id: 'quiz', label: '🎯 Quiz' },
+  ];
+  return (
+    <nav>
+      <div className="nav-inner">
+        <div className="logo">
+          <div className="logo-icon">⚡</div>
+          AI Fundamentals
+        </div>
+        <div className="nav-links">
+          {sections.map(s => (
+            <button
+              key={s.id}
+              className={`nav-btn ${current === s.id ? 'active' : ''}`}
+              onClick={() => setCurrent(s.id)}
+            >{s.label}</button>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+const Home = ({ setCurrent }) => (
+  <section className="hero">
+    <div className="hero-badge">🎓 90-Minute Interactive Orientation</div>
+    <h1>AI Awareness & Fundamentals</h1>
+    <p className="hero-sub">
+      Understanding Artificial Intelligence for Karuna Fellows and Program Leaders.
+      An engaging journey through AI — with simple analogies, hands-on demos, and real-world applications for social impact.
+    </p>
+    <button className="cta-btn" onClick={() => setCurrent('timeline')}>
+      Let's Begin 🚀
+    </button>
+    <div className="card-grid" style={{ marginTop: '3rem' }}>
+      <div className="card">
+        <div className="card-icon">💡</div>
+        <h3>Simple Analogies</h3>
+        <p>Learn AI through everyday comparisons — like a GPS that needs your destination.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon teal">🎮</div>
+        <h3>Hands-On Demos</h3>
+        <p>Try prompt engineering live — from synthesizing reports to analyzing dashboards.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon green">🌌</div>
+        <h3>Interactive Mindmap</h3>
+        <p>Explore the AI Universe through a clickable, visual mindmap of concepts.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon pink">🎯</div>
+        <h3>Grand Finale Quiz</h3>
+        <p>Test your understanding with fun, bite-sized questions at the end.</p>
+      </div>
+    </div>
+  </section>
+);
+
+const Timeline = () => {
+  const data = [
+    { year: '1876', name: 'Phone', time: '~75 years' },
+    { year: '1920', name: 'Radio', time: '~38 years' },
+    { year: '1927', name: 'TV', time: '~22 years' },
+    { year: '1967', name: 'ATM', time: '~18 years' },
+    { year: '1975', name: 'PC', time: '~14 years' },
+    { year: '1983', name: 'Mobile', time: '~16 years' },
+    { year: '1991', name: 'Internet', time: '~7 years' },
+    { year: '2004', name: 'FB / YouTube', time: '~4.5 years' },
+    { year: '2009', name: 'WhatsApp / Uber', time: '~3 years' },
+    { year: '2022', name: 'AI (GenAI)', time: '~2 months! ⚡', highlight: true },
+  ];
+  return (
+    <section>
+      <h2>📈 Technology Adoption Over Time</h2>
+      <p className="section-sub">Time taken to reach 10 Crore (100 Million) users. Notice the acceleration?</p>
+      <div className="timeline">
+        {data.map((d, i) => (
+          <div key={i} className={`timeline-item ${d.highlight ? 'highlight' : ''}`}>
+            <div className="tl-year">{d.year}</div>
+            <div className="tl-name">{d.name}</div>
+            <div className="tl-time">{d.time}</div>
+          </div>
+        ))}
+      </div>
+      <div className="card" style={{ marginTop: '2rem', background: 'var(--gradient)', color: 'white' }}>
+        <h3 style={{ color: 'white' }}>💭 The Big Question</h3>
+        <p style={{ color: 'white', fontSize: '1.05rem', margin: 0 }}>
+          Given this global pace of adoption — the question is not <em>"Are we ready?"</em>
+          but <strong>"How do we begin today?"</strong>
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const Myths = () => {
+  const [flipped, setFlipped] = useState({});
+  const myths = [
+    { myth: 'AI will replace the entire workforce', fact: 'AI handles routine tasks so teams can focus on what matters most — people!' },
+    { myth: 'AI is only for tech experts', fact: 'If you can use a smartphone, you can use AI tools!' },
+    { myth: 'AI thinks like a human', fact: 'AI does not have consciousness, intent, or understanding.' },
+    { myth: 'AI is dangerous for humans', fact: "You've been using AI without realizing it — in search, email filters, navigation!" },
+  ];
+  return (
+    <section>
+      <h2>🎭 AI Myths vs. Facts</h2>
+      <p className="section-sub">Click each card to reveal the reality behind common misconceptions.</p>
+      <div className="card-grid">
+        {myths.map((m, i) => (
+          <div
+            key={i}
+            className={`flip-card ${flipped[i] ? 'flipped' : ''}`}
+            onClick={() => setFlipped({ ...flipped, [i]: !flipped[i] })}
+          >
+            <div className="flip-inner">
+              <div className="flip-front">
+                <h3>❌ Myth #{i+1}</h3>
+                <p style={{ color: 'var(--danger)' }}>{m.myth}</p>
+                <div className="flip-hint">Tap to reveal →</div>
+              </div>
+              <div className="flip-back">
+                <h3>✅ Reality</h3>
+                <p style={{ color: 'var(--success)' }}>{m.fact}</p>
+                <div className="flip-hint">Tap to flip back</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="card" style={{ marginTop: '2rem' }}>
+        <h3>🧭 Simple Analogy</h3>
+        <p>
+          <strong>AI is like a GPS navigation system.</strong> It knows every map, road, and shortcut
+          in the world — but it still needs <em>you</em> to input the final destination and stay behind
+          the wheel to drive the car.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const HowAI = () => (
+  <section>
+    <h2>⚙️ How AI Works: The 3-Step Process</h2>
+    <p className="section-sub">If you know how a child learns, you can understand how AI learns.</p>
+    <div className="steps">
+      <div className="step">
+        <div className="step-num">1</div>
+        <h3>📊 Data</h3>
+        <p>AI is given millions of examples — text, images, sounds, or structured data.</p>
+      </div>
+      <div className="step">
+        <div className="step-num">2</div>
+        <h3>🧠 Learning</h3>
+        <p>AI finds patterns and learns. Show examples → Correct mistakes → Learning outcomes.</p>
+      </div>
+      <div className="step">
+        <div className="step-num">3</div>
+        <h3>🎯 Output</h3>
+        <p>AI helps with new tasks — predicting, classifying, generating, or recommending.</p>
+      </div>
+    </div>
+    <div className="card" style={{ marginTop: '2rem' }}>
+      <h3>🔑 Key Insight</h3>
+      <p>
+        AI predicts the most probable next output based on patterns in data — <strong>nothing more, nothing less</strong>.
+        It is mathematics, statistics, and computing power applied to large amounts of data.
+      </p>
+    </div>
+  </section>
+);
+
+const Types = () => {
+  const [active, setActive] = useState(0);
+  const types = [
+    { name: 'Narrow AI (ANI)', tag: 'TODAY', color: 'var(--gradient)',
+      desc: 'Excels at one specific task. Cannot transfer knowledge across domains.',
+      examples: ['Siri', 'Alexa', 'ChatGPT', 'Netflix Recommendations', 'Spam Filters'] },
+    { name: 'General AI (AGI)', tag: 'THE GOAL', color: 'var(--gradient-2)',
+      desc: 'Human-level intelligence across any domain. Can learn and reason. Does not exist yet — estimated 10-50 years away.',
+      examples: ['Active research area', 'Future milestone'] },
+    { name: 'Super AI (ASI)', tag: 'HYPOTHETICAL', color: 'var(--gradient-5)',
+      desc: 'Intelligence that surpasses human brains in every field. Subject of debate and science fiction.',
+      examples: ['Long-term speculation', 'Sci-fi staple'] },
+  ];
+  return (
+    <section>
+      <h2>🧠 The Three Types of AI</h2>
+      <p className="section-sub">Reality check: Every AI tool you use today — from ChatGPT to Netflix — is Narrow AI.</p>
+      <div className="spectrum">
+        {types.map((t, i) => (
+          <div key={i} className={`spectrum-item ${active === i ? 'active' : ''}`} onClick={() => setActive(i)}>
+            <h4>{t.tag}</h4>
+            <p>{t.name}</p>
+          </div>
+        ))}
+      </div>
+      <div className="card" style={{ marginTop: '1.5rem' }}>
+        <h3>{types[active].name}</h3>
+        <p>{types[active].desc}</p>
+        <div style={{ marginTop: '0.8rem' }}>
+          {types[active].examples.map((e, i) => (
+            <span key={i} className="chip">{e}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Spectrum = () => {
+  const [active, setActive] = useState(0);
+  const items = [
+    { name: 'Rule-Based', desc: 'Hard-coded if-then rules. No learning capability.',
+      example: 'Spam filters with keyword lists', color: '#f59e0b' },
+    { name: 'Machine Learning', desc: 'Learns patterns from data automatically.',
+      example: 'Netflix recommendations', color: '#3b82f6' },
+    { name: 'Deep Learning', desc: 'Neural networks with many layers.',
+      example: 'Face recognition, voice assistants', color: '#8b5cf6' },
+    { name: 'Generative AI', desc: 'Creates entirely new content.',
+      example: 'ChatGPT, Midjourney, GitHub Copilot', color: '#ec4899' },
+  ];
+  return (
+    <section>
+      <h2>🌊 The AI Spectrum — Simple to Sophisticated</h2>
+      <p className="section-sub">All of these are still Narrow AI — just increasingly sophisticated.</p>
+      <div className="spectrum">
+        {items.map((t, i) => (
+          <div key={i} className={`spectrum-item ${active === i ? 'active' : ''}`} onClick={() => setActive(i)}>
+            <h4>{t.name}</h4>
+          </div>
+        ))}
+      </div>
+      <div className="card" style={{ marginTop: '1.5rem' }}>
+        <h3>{items[active].name}</h3>
+        <p>{items[active].desc}</p>
+        <p style={{ fontStyle: 'italic', color: 'var(--primary)' }}>Example: {items[active].example}</p>
+      </div>
+    </section>
+  );
+};
+
+const Universe = () => {
+  const [active, setActive] = useState(0);
+  const levels = [
+    {
+      name: 'AI', full: 'Artificial Intelligence', icon: '🤖',
+      desc: 'The broadest umbrella — any system designed to mimic human intelligence. It encompasses all techniques that enable machines to perform tasks requiring human-like cognition, from simple rule-based systems to advanced neural networks.',
+      characteristics: ['Mimics human intelligence', 'Performs cognitive tasks', 'Learns from data or rules', 'Can be narrow or general'],
+      examples: [
+        { name: 'Virtual Assistants', desc: 'Siri, Alexa — understand voice commands and respond naturally' },
+        { name: 'Recommendation Engines', desc: 'Netflix, YouTube — suggest content based on your behavior' },
+        { name: 'Autonomous Systems', desc: 'Self-driving cars, delivery drones navigating environments' }
+      ],
+      didYouKnow: 'The term "Artificial Intelligence" was coined in 1956 by John McCarthy at the Dartmouth Conference — over 70 years ago!',
+      color: '#4f46e5', chipClass: ''
+    },
+    {
+      name: 'ML', full: 'Machine Learning', icon: '📊',
+      desc: 'A subset of AI where systems learn patterns from data automatically — without being explicitly programmed. The more data you feed it, the better it gets at its task.',
+      characteristics: ['Learns from data', 'Improves with experience', 'No explicit programming', 'Pattern recognition'],
+      examples: [
+        { name: 'Netflix Recommendations', desc: 'Learns your viewing preferences to suggest shows you\'ll love' },
+        { name: 'Spam Filters', desc: 'Gmail learns from millions of emails to catch spam automatically' },
+        { name: 'Smart Home Assistants', desc: 'Alexa learns your routines and preferences over time' }
+      ],
+      didYouKnow: 'Arthur Samuel coined "Machine Learning" in 1959 while building a checkers program that improved by playing against itself!',
+      color: '#0891b2', chipClass: 'teal'
+    },
+    {
+      name: 'DL', full: 'Deep Learning', icon: '🧠',
+      desc: 'A specialized form of ML using neural networks with many layers (hence "deep"). It mimics how the human brain processes information — excelling at complex tasks like vision and speech.',
+      characteristics: ['Neural networks', 'Multiple processing layers', 'Mimics human brain', 'Handles complex patterns'],
+      examples: [
+        { name: 'Self-Driving Cars', desc: 'Recognizes roads, traffic signs, pedestrians, and obstacles in real-time' },
+        { name: 'Face Recognition', desc: 'Unlocks your phone by learning unique facial features' },
+        { name: 'Medical Imaging', desc: 'Detects tumors in X-rays with accuracy rivaling expert radiologists' }
+      ],
+      didYouKnow: 'Deep learning breakthroughs in 2012 (AlexNet) sparked the modern AI revolution — accuracy on ImageNet jumped from 74% to 85% overnight!',
+      color: '#7c3aed', chipClass: 'purple'
+    },
+    {
+      name: 'GenAI', full: 'Generative AI', icon: '🎨',
+      desc: 'AI that creates entirely new content — text, images, video, music, code — based on patterns learned from massive datasets. It doesn\'t just analyze; it creates.',
+      characteristics: ['Creates new content', 'Multimodal output', 'Learns from massive data', 'Original generation'],
+      examples: [
+        { name: 'ChatGPT / Claude', desc: 'Conversational AI that writes, reasons, and assists with complex tasks' },
+        { name: 'DALL·E / Midjourney', desc: 'Generate stunning images from text descriptions in seconds' },
+        { name: 'GitHub Copilot', desc: 'Writes and completes code based on natural language comments' },
+        { name: 'Synthesia', desc: 'Creates AI-generated videos with realistic avatars speaking any language' }
+      ],
+      didYouKnow: 'Generative AI crossed $1 trillion in market value by 2025 — the fastest-growing tech segment in history!',
+      color: '#db2777', chipClass: 'pink'
+    },
+    {
+      name: 'LLM', full: 'Large Language Models', icon: '💬',
+      desc: 'A type of GenAI trained on massive text data to understand and generate human language. They predict the next word (token) based on context — billions of predictions create coherent, useful responses.',
+      characteristics: ['Trained on billions of documents', 'Trillions of parameters', 'Predicts next token', 'Emergent reasoning abilities'],
+      examples: [
+        { name: 'GPT-4 (OpenAI)', desc: 'Powers ChatGPT — excels at reasoning, coding, and creative writing' },
+        { name: 'Claude (Anthropic)', desc: 'Designed for safety and helpfulness — strong at analysis and long documents' },
+        { name: 'Gemini (Google)', desc: 'Multimodal model understanding text, images, and code together' },
+        { name: 'Llama (Meta)', desc: 'Open-source model anyone can run and customize' }
+      ],
+      didYouKnow: 'GPT-4 was trained on an estimated 1.8 trillion tokens — that\'s roughly equivalent to reading every book ever written, multiple times over!',
+      color: '#059669', chipClass: 'green'
+    },
+  ];
+
+  // Layout: center + 5 nodes in a circle
+  const cx = 450, cy = 290, radius = 210;
+  const nodes = levels.map((l, i) => {
+    const angle = (i * 2 * Math.PI / 5) - Math.PI / 2;
+    return {
+      ...l,
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle),
+      idx: i
+    };
+  });
+
+  const current = active >= 0 ? levels[active] : null;
+
+  return (
+    <section>
+      <h2>🌌 The AI Universe — Interactive Mindmap</h2>
+      <p className="section-sub">Click any node to explore the hierarchy of AI technologies. Each layer builds upon the one above it — from the broad umbrella of AI down to specialized tools like LLMs.</p>
+
+      <div className="mindmap-container">
+        <svg className="mindmap-svg" viewBox="0 0 900 580" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#4f46e5" />
+              <stop offset="100%" stopColor="#db2777" />
+            </linearGradient>
+            <radialGradient id="centerGlow">
+              <stop offset="0%" stopColor="rgba(79,70,229,0.15)" />
+              <stop offset="100%" stopColor="rgba(79,70,229,0)" />
+            </radialGradient>
+            <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+              <feOffset dx="0" dy="3" result="offsetblur"/>
+              <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          {/* Background glow */}
+          <circle cx={cx} cy={cy} r="260" fill="url(#centerGlow)" />
+
+          {/* Curved connection lines */}
+          {nodes.map((n, i) => {
+            const midX = (cx + n.x) / 2;
+            const midY = (cy + n.y) / 2;
+            const ctrlX = midX + (n.y - cy) * 0.15;
+            const ctrlY = midY - (n.x - cx) * 0.15;
+            return (
+              <path
+                key={`line-${i}`}
+                d={`M ${cx} ${cy} Q ${ctrlX} ${ctrlY} ${n.x} ${n.y}`}
+                className={`connection-line ${active === i ? 'active' : ''}`}
+                strokeDasharray={active === i ? '0' : '6 6'}
+              />
+            );
+          })}
+
+          {/* Center node */}
+          <g className="mindmap-node" onClick={() => setActive(-1)} filter="url(#softShadow)">
+            <circle cx={cx} cy={cy} r="75" fill="url(#lineGradient)"
+              className={`node-circle ${active === -1 ? 'active' : ''}`}
+              stroke="white" strokeWidth="4" />
+            <text x={cx} y={cy - 5} className="node-icon" style={{ fill: 'white', fontSize: '32px' }}>🌐</text>
+            <text x={cx} y={cy + 25} style={{ fill: 'white', fontSize: '14px', fontWeight: 800, textAnchor: 'middle', pointerEvents: 'none' }}>AI UNIVERSE</text>
+          </g>
+
+          {/* Outer nodes with external labels */}
+          {nodes.map((n, i) => (
+            <g key={i} className="mindmap-node" onClick={() => setActive(i)} filter="url(#softShadow)">
+              <circle cx={n.x} cy={n.y} r="62" fill={n.color}
+                className={`node-circle ${active === i ? 'active' : ''}`}
+                stroke="white" strokeWidth="4" />
+              <text x={n.x} y={n.y + 2} className="node-icon" style={{ fill: 'white' }}>{n.icon}</text>
+              <text x={n.x} y={n.y + 28} style={{ fill: 'white', fontSize: '13px', fontWeight: 800, textAnchor: 'middle', pointerEvents: 'none' }}>{n.name}</text>
+
+              {/* External label below node */}
+              <text x={n.x} y={n.y + 85} className="node-label">{n.name}</text>
+              <text x={n.x} y={n.y + 102} className="node-sublabel">{n.full.split(' ').slice(0, 2).join(' ')}</text>
+            </g>
+          ))}
+        </svg>
+      </div>
+
+      {/* Rich Details Panel */}
+      {current ? (
+        <div className="mindmap-details" key={active}>
+          <div className="mindmap-header" style={{ background: `linear-gradient(135deg, ${current.color}, ${current.color}dd)` }}>
+            <div className="mindmap-header-icon">{current.icon}</div>
+            <div className="mindmap-header-text">
+              <h3>{current.full}</h3>
+              <p>Level {active + 1} of 5 in the AI hierarchy</p>
+            </div>
+          </div>
+
+          <div className="mindmap-body">
+            {/* Description */}
+            <div className="mindmap-section">
+              <div className="mindmap-section-title">📖 Overview</div>
+              <p className="mindmap-desc">{current.desc}</p>
+            </div>
+
+            {/* Key Characteristics */}
+            <div className="mindmap-section">
+              <div className="mindmap-section-title">🔑 Key Characteristics</div>
+              <div className="char-list">
+                {current.characteristics.map((c, i) => (
+                  <span key={i} className="char-pill">{c}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Real-World Examples */}
+            <div className="mindmap-section">
+              <div className="mindmap-section-title">💡 Real-World Examples</div>
+              <div className="example-list">
+                {current.examples.map((ex, i) => (
+                  <div key={i} className="example-item" style={{ borderLeftColor: current.color }}>
+                    <div>
+                      <strong>{ex.name}</strong>
+                      <span>{ex.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Did You Know */}
+            <div className="mindmap-section">
+              <div className="did-you-know">
+                <div className="did-you-know-icon">💡</div>
+                <div>
+                  <strong>Did You Know?</strong>
+                  <p>{current.didYouKnow}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Hierarchy Note */}
+            <div className="hierarchy-note">
+              <span>🔗</span>
+              <span>
+                {active === 0 && 'AI is the foundation — everything else (ML, DL, GenAI, LLM) is a subset of it.'}
+                {active === 1 && 'ML is a subset of AI. It\'s the engine that powers most modern AI systems.'}
+                {active === 2 && 'DL is a subset of ML, using neural networks. It powers most breakthrough AI today.'}
+                {active === 3 && 'GenAI is a subset of DL that creates new content. It\'s the most visible form of AI today.'}
+                {active === 4 && 'LLMs are a type of GenAI specialized in language. They power ChatGPT, Claude, and Gemini.'}
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="mindmap-details">
+          <div className="mindmap-body" style={{ textAlign: 'center', padding: '2rem' }}>
+            <p style={{ fontSize: '1.5rem', color: 'var(--text)' }}>
+              👆 Click any node in the mindmap above to explore its details
+            </p>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+const GenVsPred = () => (
+  <section>
+    <h2>🎨 Generative AI vs. Predictive AI</h2>
+    <p className="section-sub">Both are powerful. Together, they cover most business AI use cases.</p>
+    <div className="compare-grid">
+      <div className="compare-card gen">
+        <h3>✨ Generative AI</h3>
+        <p style={{ fontSize: '0.9rem' }}>Creates new content based on learned patterns</p>
+        <ul>
+          <li>Text generation and summarization</li>
+          <li>Image synthesis and editing</li>
+          <li>Code writing and completion</li>
+          <li>Music and video composition</li>
+        </ul>
+        <p style={{ marginTop: '0.8rem', fontSize: '0.85rem' }}><strong>Output:</strong> Original content that didn't exist before</p>
+        <div style={{ marginTop: '0.5rem' }}>
+          <span className="chip pink">ChatGPT</span>
+          <span className="chip pink">DALL-E</span>
+          <span className="chip pink">GitHub Copilot</span>
+          <span className="chip pink">Midjourney</span>
+        </div>
+      </div>
+      <div className="compare-card pred">
+        <h3>📊 Predictive AI</h3>
+        <p style={{ fontSize: '0.9rem' }}>Analyzes data to forecast future outcomes</p>
+        <ul>
+          <li>Classification and categorization</li>
+          <li>Regression and forecasting</li>
+          <li>Risk scoring and ranking</li>
+          <li>Anomaly detection</li>
+        </ul>
+        <p style={{ marginTop: '0.8rem', fontSize: '0.85rem' }}><strong>Output:</strong> Predictions, scores, classifications</p>
+        <div style={{ marginTop: '0.5rem' }}>
+          <span className="chip teal">Fraud detection</span>
+          <span className="chip teal">Sales forecasting</span>
+          <span className="chip teal">Spam filters</span>
+          <span className="chip teal">Churn prediction</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ✅ FIXED: Properly closed all <div> tags
+const DataLLM = () => (
+  <section>
+    <h2>💾 Data & Large Language Models</h2>
+    <p className="section-sub">Data is the fuel. Without data, there is no AI. Period.</p>
+
+    <h3>🔄 The Data Pipeline</h3>
+    <div className="pipeline">
+      <div className="pipeline-step"><div className="pipeline-icon">📥</div><h4>Collection</h4></div>
+      <div className="pipeline-step"><div className="pipeline-icon">🧹</div><h4>Cleaning</h4></div>
+      <div className="pipeline-step"><div className="pipeline-icon">🏷️</div><h4>Labeling</h4></div>
+      <div className="pipeline-step"><div className="pipeline-icon">🧠</div><h4>Training</h4></div>
+      <div className="pipeline-step"><div className="pipeline-icon">🚀</div><h4>Deployment</h4></div>
+    </div>
+
+    <div className="card" style={{ marginTop: '1.5rem', background: '#fef2f2', borderColor: '#fecaca' }}>
+      <h3 style={{ color: 'var(--danger)' }}>⚠️ Garbage In, Garbage Out</h3>
+      <p>An AI model is only as good as the data it learns from. Biased data produces biased AI. Amazon scrapped an AI recruiting tool after it learned to penalize women's resumes.</p>
+      <p style={{ fontStyle: 'italic', color: 'var(--text)' }}><strong>Key Takeaway:</strong> Always question what data an AI was trained on. Quality and diversity of data matter more than quantity.</p>
+    </div>
+
+    <div className="card" style={{ marginTop: '1.5rem' }}>
+      <h3>📚 Large Language Models (LLMs)</h3>
+      <p>AI systems trained on massive text data to understand and generate language. They predict the next word (token) in a sequence, one at a time, based on context — billions of predictions create coherent responses.</p>
+      <div style={{ marginTop: '1rem' }}>
+        <span className="chip">Billions of documents</span>
+        <span className="chip teal">Trillions of parameters</span>
+        <span className="chip purple">Emergent abilities</span>
+        <span className="chip green">Reasoning & coding</span>
+      </div>
+      <div style={{ marginTop: '1rem' }}>
+        <strong>Popular LLMs:</strong>
+        <div style={{ marginTop: '0.5rem' }}>
+          <span className="chip">GPT-4 (OpenAI)</span>
+          <span className="chip teal">Claude (Anthropic)</span>
+          <span className="chip pink">Gemini (Google)</span>
+          <span className="chip purple">Llama (Meta)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const CoPilot = () => (
+  <section>
+    <h2>🚀 AI as Your Workplace Co-Pilot</h2>
+    <p className="section-sub">Think of AI as an intern who works at superhuman speed — but needs your supervision and judgment.</p>
+    <div className="copilot-grid">
+      <div className="copilot-card can">
+        <h3>✅ What AI CAN Do</h3>
+        <ul>
+          <li>Draft emails, reports, and presentations in seconds</li>
+          <li>Summarize long meetings and documents</li>
+          <li>Analyze data and spot trends</li>
+          <li>Write and debug code</li>
+          <li>Brainstorm ideas and creative concepts</li>
+          <li>Translate languages in real-time</li>
+          <li>Schedule and manage tasks</li>
+        </ul>
+      </div>
+      <div className="copilot-card cannot">
+        <h3>❌ What AI CANNOT Do</h3>
+        <ul>
+          <li>Replace your judgment and domain expertise</li>
+          <li>Understand organizational politics and culture</li>
+          <li>Take accountability for decisions</li>
+          <li>Build genuine human relationships</li>
+          <li>Navigate ethical gray areas</li>
+          <li>Exercise true creativity and intuition</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+);
+
+const PromptLab = () => {
+  const [level, setLevel] = useState('good');
+  const [role, setRole] = useState('experienced marketing strategist');
+  const [context, setContext] = useState('working with a SaaS startup selling to remote teams');
+  const [task, setTask] = useState('Create a 3-month content marketing plan');
+  const [constraints, setConstraints] = useState('table format, budget under Rs 5K, exclude paid ads');
+
+  const output = `📋 ROLE: You are an ${role}.
+
+🎯 CONTEXT: ${context}.
+
+✅ TASK: ${task}.
+
+⚙️ CONSTRAINTS: ${constraints}.
+
+─────────────────────────────────────
+✨ COMBINED PROMPT:
+─────────────────────────────────────
+"You are an ${role}, ${context}. ${task}. Format as ${constraints}."
+
+💡 Golden Rule: The quality of your output is directly
+proportional to the quality of your input.`;
+
+  return (
+    <section>
+      <h2>✍️ The Prompt Engineering Lab</h2>
+      <p className="section-sub">
+        The <strong>RCTC Framework</strong>: Role + Context + Task + Constraints. Edit the fields below to build a perfect prompt.
+      </p>
+
+      <div className="prompt-lab">
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          <button className={`nav-btn ${level === 'basic' ? 'active' : ''}`} onClick={() => setLevel('basic')}>🔸 Basic</button>
+          <button className={`nav-btn ${level === 'clear' ? 'active' : ''}`} onClick={() => setLevel('clear')}>🔷 Clear</button>
+          <button className={`nav-btn ${level === 'good' ? 'active' : ''}`} onClick={() => setLevel('good')}>💎 Good (RCTC)</button>
+        </div>
+
+        {level === 'basic' && (
+          <div className="level basic" style={{ marginBottom: '1rem' }}>
+            <div className="level-badge">BASIC</div>
+            <div className="level-content">
+              <p style={{ margin: 0 }}>Vague, generic — produces unfocused output.</p>
+              <code>"Make a marketing plan"</code>
+            </div>
+          </div>
+        )}
+        {level === 'clear' && (
+          <div className="level clear" style={{ marginBottom: '1rem' }}>
+            <div className="level-badge">CLEAR</div>
+            <div className="level-content">
+              <p style={{ margin: 0 }}>Adds domain and context.</p>
+              <code>"Give me a strategy for XYZ NGO in Water & Sanitation in UP to grow."</code>
+            </div>
+          </div>
+        )}
+        {level === 'good' && (
+          <>
+            <div className="prompt-field">
+              <label>👤 ROLE — Who should the AI act as?</label>
+              <input value={role} onChange={e => setRole(e.target.value)} />
+            </div>
+            <div className="prompt-field">
+              <label>📖 CONTEXT — Background information</label>
+              <input value={context} onChange={e => setContext(e.target.value)} />
+            </div>
+            <div className="prompt-field">
+              <label>🎯 TASK — What exactly to do?</label>
+              <textarea value={task} onChange={e => setTask(e.target.value)} />
+            </div>
+            <div className="prompt-field">
+              <label>⚙️ CONSTRAINTS — Format, tone, length, exclusions</label>
+              <textarea value={constraints} onChange={e => setConstraints(e.target.value)} />
+            </div>
+          </>
+        )}
+
+        {level === 'good' && (
+          <>
+            <div className="prompt-output-label">🔮 Your Perfect Prompt</div>
+            <div className="prompt-output">{output}</div>
+          </>
+        )}
+      </div>
+
+      <div className="card" style={{ marginTop: '1.5rem' }}>
+        <h3>💡 Pro Tip: Searching vs. Instructing</h3>
+        <p><strong>Search mindset (Google):</strong> "best Python tutorial" → sift through 10 blue links → you do the work.</p>
+        <p><strong>Instruct mindset (AI):</strong> "Teach me Python basics as a 2-hour curriculum with practice exercises for a beginner" → receive a structured, ready-to-use curriculum.</p>
+        <p style={{ fontStyle: 'italic' }}>Context + Specificity = Dramatically better output.</p>
+      </div>
+    </section>
+  );
+};
+
+const Demos = () => (
+  <section>
+    <h2>🎬 Let's Play — Live Demos</h2>
+    <p className="section-sub">Real-world use cases for Karuna Fellows and Program Leaders.</p>
+
+    <div className="demo-card">
+      <h3>📄 Demo 1: The Qualitative Report Synthesizer</h3>
+      <p><strong>Scenario:</strong> A Karuna Fellow has collected dozens of raw qualitative text notes from a field assessment. Instead of spending days manually reading and tagging themes, they drop the text document into Copilot to extract thematic summaries.</p>
+      <div className="demo-prompt">{`Act as an expert qualitative researcher. Read this attached community feedback report. Give me:
+1. A clean table of the top 3 structural issues raised by the community.
+2. For each issue, provide a sub-column with a direct verbatim quote extracted from the text that perfectly highlights that problem.
+3. A short bulleted summary outlining an actionable solution based strictly on what the community suggests.`}</div>
+    </div>
+
+    <div className="demo-card">
+      <h3>📊 Demo 2: The Multi-District Training Health Dashboard</h3>
+      <p><strong>Scenario:</strong> A Program Leader wants to instantly check the performance and gaps across multiple training locations. They drop a tracking spreadsheet in and ask Copilot to act as a data analyst.</p>
+      <div className="demo-prompt">{`Act as a Program Operations leader. Analyze the attached training tracker sheet.
+I need to report the current status to management.
+• Calculate the overall registration-to-attendance drop-off rate as a single percentage.
+• Which training location has the lowest post-test score average, and what is that average?
+• Generate a visual column chart comparing the total registered versus total attended across all districts.`}</div>
+    </div>
+  </section>
+);
+
+const Cases = () => {
+  const industries = [
+    { icon: '🏥', name: 'Healthcare', desc: 'AI detects diabetic retinopathy with 90%+ accuracy. Pathology AI reduces diagnosis time from days to minutes.' },
+    { icon: '💰', name: 'Finance', desc: 'Fraud detection processes millions of transactions in real-time. Algorithmic trading executes in microseconds.' },
+    { icon: '🛒', name: 'Retail', desc: "Amazon's recommendation engine drives 35% of revenue. Dynamic pricing adjusts in real-time based on demand." },
+    { icon: '🏭', name: 'Manufacturing', desc: 'Predictive maintenance reduces downtime by 30-50%. Quality inspection AI catches defects humans miss.' },
+    { icon: '🎓', name: 'Education', desc: "Personalized learning platforms adapt to each student's pace. AI tutors provide 24/7 support at scale." },
+    { icon: '📢', name: 'Marketing', desc: 'AI-generated ad copy, audience segmentation, and campaign optimization. Agencies report 40% efficiency gains.' },
+  ];
+  return (
+    <section>
+      <h2>🏢 Cross-Industry AI Case Studies</h2>
+      <p className="section-sub">Common thread: AI augments human expertise — it doesn't replace it.</p>
+      <div className="industry-grid">
+        {industries.map((ind, i) => (
+          <div key={i} className="industry">
+            <div className="industry-icon">{ind.icon}</div>
+            <h4>{ind.name}</h4>
+            <p>{ind.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const Hallucination = () => (
+  <section>
+    <h2>🚨 Spotting AI Hallucinations</h2>
+    <p className="section-sub">
+      Hallucinations are when AI generates confident, plausible-sounding but <strong>false</strong> information.
+      Remember: <em>AI is a draft partner, not a fact-checker.</em>
+    </p>
+    <h3>🚩 Red Flags to Watch For</h3>
+    <div className="hallucination-demo">
+      <div className="red-flag">
+        <div className="red-flag-icon">⚠️</div>
+        <div><strong>Specific numbers without sources</strong><br/>e.g., "Studies show 87% of users prefer..."</div>
+      </div>
+      <div className="red-flag">
+        <div className="red-flag-icon">⚠️</div>
+        <div><strong>References to unknown people or papers</strong><br/>e.g., "According to Dr. Smith's 2019 research..."</div>
+      </div>
+      <div className="red-flag">
+        <div className="red-flag-icon">⚠️</div>
+        <div><strong>Overly confident tone about niche topics</strong><br/>e.g., "The definitive answer is..."</div>
+      </div>
+      <div className="red-flag">
+        <div className="red-flag-icon">⚠️</div>
+        <div><strong>Contradictions within the same response</strong><br/>e.g., Says X in paragraph 1 and not-X in paragraph 3.</div>
+      </div>
+    </div>
+
+    <h3 style={{ marginTop: '2rem' }}>✅ Mitigation Strategies</h3>
+    <div className="card-grid">
+      <div className="card"><div className="card-icon">🔍</div><h3>Ask for Sources</h3><p>Verify them independently before trusting.</p></div>
+      <div className="card"><div className="card-icon teal">📝</div><h3>Use AI for Drafting</h3><p>Not for facts — verify critical info elsewhere.</p></div>
+      <div className="card"><div className="card-icon green">🧩</div><h3>Break Down Queries</h3><p>Complex questions → smaller, verifiable steps.</p></div>
+      <div className="card"><div className="card-icon pink">🛡️</div><h3>Cross-Check</h3><p>Use trusted sources before acting on AI output.</p></div>
+    </div>
+  </section>
+);
+
+const Social = () => (
+  <section>
+    <h2>🤝 AI for Social Good</h2>
+    <p className="section-sub">Shift your focus from paperwork to people.</p>
+
+    <div className="copilot-grid">
+      <div className="copilot-card cannot">
+        <h3>📋 Let AI Handle</h3>
+        <ul>
+          <li>Data Cleaning</li>
+          <li>Data Analytics</li>
+          <li>Report writing</li>
+          <li>Documentation</li>
+        </ul>
+      </div>
+      <div className="copilot-card can">
+        <h3>❤️ You Focus On</h3>
+        <ul>
+          <li>Empathy</li>
+          <li>Moral guidance</li>
+          <li>Understanding emotions</li>
+          <li>Human connection</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style={{ marginTop: '2rem' }}>🛡️ Best Practices for Data Privacy & Ethical Use</h3>
+    <div className="card-grid">
+      <div className="card">
+        <div className="card-icon">🔒</div>
+        <h3>Data Privacy Compliance</h3>
+        <p>Comply with Indian laws like DPDP. Avoid sharing sensitive personal data.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon teal">🎭</div>
+        <h3>Anonymization</h3>
+        <p>Remove identifiable information. Use placeholders like "Beneficiary A."</p>
+      </div>
+      <div className="card">
+        <div className="card-icon green">✅</div>
+        <h3>Trusted Platforms</h3>
+        <p>Use Copilot, ChatGPT, Google Bard, or Hugging Face. Research privacy policies.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon pink">👁️</div>
+        <h3>Human Oversight</h3>
+        <p>Always review AI-generated content. Use AI as a tool, not a replacement.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon purple">🎓</div>
+        <h3>Informed & Ethical Use</h3>
+        <p>Conduct workshops on data privacy. Train staff on responsible AI usage.</p>
+      </div>
+      <div className="card">
+        <div className="card-icon">⚖️</div>
+        <h3>Check for Biases</h3>
+        <p>Review AI outputs for cultural sensitivity. Cross-check with reliable sources.</p>
+      </div>
+    </div>
+  </section>
+);
+
+const Quiz = () => {
+  const questions = [
+    { q: '1. AI learns by...', options: ['Being programmed with rules', 'Finding patterns in data', 'Reading textbooks'], answer: 1 },
+    { q: '2. Which is NOT an AI concern?', options: ['Data privacy', 'AI bias', 'Making work easier'], answer: 2 },
+    { q: '3. Best practice with AI output?', options: ['Use it immediately without review', 'Always review before using', 'Trust it completely'], answer: 1 },
+    { q: '4. AI can help humans with...', options: ['All of these!', 'Faster Documentation', 'Quick Research'], answer: 0 },
+    { q: '5. When sharing personal/org data...', options: ['Share everything for better results', 'Use anonymized data only', 'Include names and IDs'], answer: 1 },
+    { q: '6. AI in offices should...', options: ['Replace all human resources', "Support staff's work", 'Make decisions'], answer: 1 },
+  ];
+
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleAnswer = (idx) => {
+    if (selected !== null) return;
+    setSelected(idx);
+    setAnswers([...answers, idx]);
+    setTimeout(() => {
+      if (current + 1 < questions.length) {
+        setCurrent(current + 1);
+        setSelected(null);
+      } else {
+        setShowResult(true);
+      }
+    }, 1200);
+  };
+
+  const restart = () => {
+    setCurrent(0); setAnswers([]); setSelected(null); setShowResult(false);
+  };
+
+  const score = answers.filter((a, i) => a === questions[i].answer).length;
+
+  if (showResult) {
+    return (
+      <section>
+        <h2>🎉 Quiz Complete!</h2>
+        <div className="quiz-score">
+          <h3>{score} / {questions.length}</h3>
+          <p>
+            {score === questions.length ? "🏆 Perfect! You're an AI pro!" :
+             score >= questions.length * 0.7 ? "🌟 Great job! You've got the fundamentals down." :
+             "📚 Keep learning — revisit the sections and try again!"}
+          </p>
+        </div>
+        <button className="cta-btn" style={{ marginTop: '1.5rem' }} onClick={restart}>
+          🔄 Restart Quiz
+        </button>
+      </section>
+    );
+  }
+
+  const q = questions[current];
+  return (
+    <section>
+      <h2>🎯 Grand Finale Quiz</h2>
+      <div className="quiz-card">
+        <div className="quiz-progress">
+          <span>Question {current + 1} of {questions.length}</span>
+          <span>Score: {answers.filter((a, i) => a === questions[i].answer).length}</span>
+        </div>
+        <div className="quiz-question">{q.q}</div>
+        <div className="quiz-options">
+          {q.options.map((opt, i) => {
+            let cls = 'quiz-option';
+            if (selected !== null) {
+              if (i === q.answer) cls += ' correct';
+              else if (i === selected) cls += ' wrong';
+            }
+            return (
+              <button key={i} className={cls} onClick={() => handleAnswer(i)} disabled={selected !== null}>
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const App = () => {
+  const [current, setCurrent] = useState('home');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [current]);
+
+  const renderSection = () => {
+    switch (current) {
+      case 'home': return <Home setCurrent={setCurrent} />;
+      case 'timeline': return <Timeline />;
+      case 'myths': return <Myths />;
+      case 'how': return <HowAI />;
+      case 'types': return <Types />;
+      case 'spectrum': return <Spectrum />;
+      case 'universe': return <Universe />;
+      case 'genai': return <GenVsPred />;
+      case 'data': return <DataLLM />;
+      case 'copilot': return <CoPilot />;
+      case 'prompt': return <PromptLab />;
+      case 'demos': return <Demos />;
+      case 'cases': return <Cases />;
+      case 'risks': return <Hallucination />;
+      case 'social': return <Social />;
+      case 'quiz': return <Quiz />;
+      default: return <Home setCurrent={setCurrent} />;
+    }
+  };
+
+  return (
+    <>
+      <Nav current={current} setCurrent={setCurrent} />
+      {renderSection()}
+      <footer>
+        <p className="footer-quote">
+          "AI is here to support, not replace. You bring the heart, wisdom,
+          and human connection that technology never can."
+        </p>
+        <div className="footer-pillars">
+          <div className="pillar"><div className="pillar-icon">💚</div><div className="pillar-label">Empathy</div></div>
+          <div className="pillar"><div className="pillar-icon">🧠</div><div className="pillar-label">Wisdom</div></div>
+          <div className="pillar"><div className="pillar-icon">🤝</div><div className="pillar-label">Connection</div></div>
+        </div>
+        <p style={{ marginTop: '1.5rem' }}>🚀 Start Small • Keep Learning • Share & Grow</p>
+      </footer>
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
